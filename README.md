@@ -126,16 +126,7 @@ smart-home/
 └── README.md
 ```
 
----
 
-## 🔮 Pengembangan Selanjutnya
-- Penambahan sensor suhu dan kelembapan
-- Monitoring konsumsi listrik
-- Integrasi dengan aplikasi mobile
-- Sistem notifikasi otomatis
-- Voice control menggunakan Google Assistant
-
----
 
 ## 📄 License
 Project ini dibuat untuk kebutuhan Mata kuliah Mikrokontroler.
