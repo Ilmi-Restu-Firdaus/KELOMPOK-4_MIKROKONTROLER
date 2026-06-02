@@ -110,17 +110,18 @@ Tambahkan screenshot dashboard atau rangkaian di folder `images/`.
 ## 📂 Struktur Project
 
 ```text
-smart-home-elektronik/
+smart-home/
+│
+├── backend/
+│   └── (source code backend)
 │
 ├── esp32/
 │   └── smart_home.ino
 │
-├── web/
+├── frontend/
 │   ├── index.html
 │   ├── style.css
 │   └── script.js
-│
-├── images/
 │
 └── README.md
 ```
