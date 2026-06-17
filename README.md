@@ -97,9 +97,8 @@ Buka file HTML atau jalankan menggunakan local server.
 
 ---
 
-## 📷 Tampilan Sistem
-
-Tambahkan screenshot dashboard atau rangkaian di folder `images/`.
+## 📷 Link Wokwi
+https://wokwi.com/projects/466313882452088833
 
 ```md
 ![Dashboard](images/dashboard.png)
