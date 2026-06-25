@@ -1,61 +1,160 @@
-const statusDiv = document.getElementById("status");
+// ================= MQTT CONFIG =================
 
 const client = mqtt.connect(
-    "wss://broker.hivemq.com:8884/mqtt"
+    "wss://kelompok4mikrokontroller.cloud.shiftr.io:443",
+    {
+        username: "kelompok4mikrokontroller",
+        password: "84wmjt1a5zRurEuh",
+        reconnectPeriod: 3000
+    }
 );
+
+// ================= ELEMENT =================
+
+const statusBox = document.getElementById("status");
+const suhuBox = document.getElementById("suhu");
+const lembabBox = document.getElementById("lembab");
+
+// ================= CONNECT =================
 
 client.on("connect", () => {
 
     console.log("MQTT Connected");
 
-    statusDiv.innerHTML = "MQTT : Connected";
-    statusDiv.className = "status online";
+    statusBox.innerHTML = "🟢 MQTT Connected";
+    statusBox.style.background = "#28a745";
+    statusBox.style.color = "#ffffff";
 
-    client.subscribe("smarthome/suhu");
-    client.subscribe("smarthome/kelembaban");
-    client.subscribe("smarthome/jarak");
+    client.subscribe("smarthome/sensor", (err) => {
+
+        if (!err) {
+            console.log("Subscribe berhasil");
+        } else {
+            console.error("Subscribe gagal:", err);
+        }
+
+    });
 });
+
+// ================= RECONNECT =================
 
 client.on("reconnect", () => {
 
-    statusDiv.innerHTML = "MQTT : Reconnecting...";
-    statusDiv.className = "status offline";
+    console.log("MQTT Reconnecting...");
+
+    statusBox.innerHTML = "🟡 MQTT Reconnecting...";
+    statusBox.style.background = "#ffc107";
+    statusBox.style.color = "#000000";
 });
 
-client.on("error", (err) => {
-    console.log(err);
+// ================= CLOSE =================
+
+client.on("close", () => {
+
+    console.log("MQTT Disconnected");
+
+    statusBox.innerHTML = "🔴 MQTT Disconnected";
+    statusBox.style.background = "#dc3545";
+    statusBox.style.color = "#ffffff";
 });
+
+// ================= OFFLINE =================
+
+client.on("offline", () => {
+
+    console.log("MQTT Offline");
+
+    statusBox.innerHTML = "🔴 MQTT Offline";
+    statusBox.style.background = "#dc3545";
+    statusBox.style.color = "#ffffff";
+});
+
+// ================= ERROR =================
+
+client.on("error", (error) => {
+
+    console.error("MQTT Error:", error);
+
+    statusBox.innerHTML = "❌ MQTT Error";
+    statusBox.style.background = "#dc3545";
+    statusBox.style.color = "#ffffff";
+});
+
+// ================= RECEIVE MESSAGE =================
 
 client.on("message", (topic, message) => {
 
-    let value = message.toString();
+    console.log(
+        "Topic:",
+        topic,
+        "Message:",
+        message.toString()
+    );
 
-    if(topic === "smarthome/suhu"){
-        document.getElementById("suhu").innerText = value;
+    if (topic === "smarthome/sensor") {
+
+        try {
+
+            const data = JSON.parse(
+                message.toString()
+            );
+
+            if (data.suhu !== undefined) {
+                suhuBox.innerText = data.suhu;
+            }
+
+            if (data.lembab !== undefined) {
+                lembabBox.innerText = data.lembab;
+            }
+
+        } catch (err) {
+
+            console.error(
+                "JSON Parse Error:",
+                err
+            );
+        }
     }
-
-    if(topic === "smarthome/kelembaban"){
-        document.getElementById("kelembaban").innerText = value;
-    }
-
-    if(topic === "smarthome/jarak"){
-        document.getElementById("jarak").innerText = value;
-    }
-
 });
 
-function lampu1(status){
-    client.publish("smarthome/lampu1", status);
+// ================= CONTROL LED =================
+
+function kontrolLED(status) {
+
+    if (!client.connected) {
+
+        alert("MQTT belum terhubung!");
+        return;
+    }
+
+    client.publish(
+        "smarthome/led",
+        status
+    );
+
+    console.log(
+        "LED:",
+        status
+    );
 }
 
-function lampu2(status){
-    client.publish("smarthome/lampu2", status);
-}
+// ================= CONTROL FAN =================
 
-function lampu3(status){
-    client.publish("smarthome/lampu3", status);
-}
+function kontrolFan(status) {
 
-function kipas(status){
-    client.publish("smarthome/kipas", status);
+    if (!client.connected) {
+
+        alert("MQTT belum terhubung!");
+        return;
+    }
+
+    client.publish(
+        "smarthome/fan",
+        status
+    );
+
+    console.log(
+        "Fan:",
+        status
+    );
 }
