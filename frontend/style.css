@@ -7,10 +7,12 @@
 body{
     font-family:Arial, sans-serif;
     background:#f4f6f9;
-    padding:20px;
+    min-height:100vh;
+    padding:15px;
 }
 
 .container{
+    width:100%;
     max-width:900px;
     margin:auto;
 }
@@ -18,68 +20,133 @@ body{
 h1{
     text-align:center;
     margin-bottom:20px;
+    color:#333;
+    font-size:clamp(1.5rem,4vw,2.5rem);
 }
 
 .status{
     text-align:center;
-    padding:10px;
-    border-radius:10px;
-    margin-bottom:20px;
-    font-weight:bold;
-}
-
-.online{
-    background:#28a745;
-    color:white;
-}
-
-.offline{
+    padding:12px;
+    border-radius:12px;
     background:#dc3545;
     color:white;
+    font-weight:bold;
+    margin-bottom:20px;
+    font-size:1rem;
 }
 
 .card{
     background:white;
     padding:20px;
-    border-radius:15px;
     margin-bottom:20px;
+    border-radius:15px;
     box-shadow:0 3px 10px rgba(0,0,0,0.1);
 }
 
 .card h2{
     margin-bottom:15px;
+    color:#333;
+    font-size:1.2rem;
+}
+
+.button-group{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
 }
 
 button{
-    padding:12px 18px;
+    flex:1;
+    min-width:120px;
     border:none;
-    border-radius:8px;
+    padding:14px;
+    border-radius:10px;
     cursor:pointer;
     color:white;
-    background:#28a745;
-    margin:5px;
+    font-size:1rem;
+    font-weight:bold;
+    transition:0.3s;
 }
 
 button:hover{
     opacity:0.9;
+    transform:translateY(-2px);
 }
 
-.off{
+.btn-on{
+    background:#28a745;
+}
+
+.btn-off{
     background:#dc3545;
 }
 
-.btn-group{
-    margin-bottom:10px;
-}
-
 .sensor-box{
-    background:#eef2f7;
-    padding:15px;
-    margin:10px 0;
-    border-radius:10px;
-    font-size:20px;
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
 }
 
-.sensor-box span{
+.sensor-item{
+    background:#eef2f7;
+    padding:20px;
+    border-radius:12px;
+    text-align:center;
+    font-size:1.1rem;
+}
+
+.sensor-item span{
+    display:block;
+    font-size:2rem;
     font-weight:bold;
+    margin-top:8px;
+    color:#007bff;
+}
+
+/* Tablet */
+@media (max-width:768px){
+
+    .container{
+        max-width:100%;
+    }
+
+    .card{
+        padding:15px;
+    }
+
+    .sensor-box{
+        grid-template-columns:1fr;
+    }
+}
+
+/* HP */
+@media (max-width:480px){
+
+    body{
+        padding:10px;
+    }
+
+    h1{
+        font-size:1.7rem;
+    }
+
+    .button-group{
+        flex-direction:column;
+    }
+
+    button{
+        width:100%;
+    }
+
+    .sensor-item{
+        font-size:1rem;
+    }
+
+    .sensor-item span{
+        font-size:1.8rem;
+    }
+
+    .status{
+        font-size:0.95rem;
+    }
 }
