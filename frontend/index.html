@@ -1,11 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Smart Home Dashboard</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+
 </head>
 <body>
-    <h2>Mikrocontroller</h2>
+
+<div class="container">
+
+    <h1>🏠 Smart Home Dashboard</h1>
+
+    <div id="status" class="status offline">
+        MQTT : Disconnected
+    </div>
+
+    <div class="card">
+
+        <h2>💡 Kontrol Lampu</h2>
+
+        <div class="btn-group">
+            <button onclick="lampu1('ON')">Lampu 1 ON</button>
+            <button onclick="lampu1('OFF')" class="off">Lampu 1 OFF</button>
+        </div>
+
+        <div class="btn-group">
+            <button onclick="lampu2('ON')">Lampu 2 ON</button>
+            <button onclick="lampu2('OFF')" class="off">Lampu 2 OFF</button>
+        </div>
+
+        <div class="btn-group">
+            <button onclick="lampu3('ON')">Lampu 3 ON</button>
+            <button onclick="lampu3('OFF')" class="off">Lampu 3 OFF</button>
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>🌀 Kontrol Kipas</h2>
+
+        <button onclick="kipas('ON')">Kipas ON</button>
+        <button onclick="kipas('OFF')" class="off">Kipas OFF</button>
+
+    </div>
+
+    <div class="card">
+
+        <h2>📊 Monitoring Sensor</h2>
+
+        <div class="sensor-box">
+            <h3>Suhu</h3>
+            <span id="suhu">0</span> °C
+        </div>
+
+        <div class="sensor-box">
+            <h3>Kelembaban</h3>
+            <span id="kelembaban">0</span> %
+        </div>
+
+        <div class="sensor-box">
+            <h3>Jarak</h3>
+            <span id="jarak">0</span> cm
+        </div>
+
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+
 </body>
 </html>
