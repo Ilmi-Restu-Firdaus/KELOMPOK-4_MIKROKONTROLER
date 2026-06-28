@@ -1,13 +1,16 @@
-# Smart Home Elektronik 🏠⚡
+# 🏠 Smart Home Elektronik
 
 ## Deskripsi Proyek
-Project ini merupakan sistem **Smart Home berbasis IoT** yang menggunakan **ESP32** sebagai mikrokontroler utama dan protokol **MQTT** sebagai media komunikasi data secara real-time. Sistem memungkinkan pengguna untuk mengontrol perangkat elektronik seperti lampu dan kipas melalui antarmuka web.
 
-Tujuan utama dari proyek ini adalah membangun sistem otomasi rumah sederhana yang ringan, responsif, dan dapat diakses dari mana saja melalui jaringan internet maupun lokal.
+Project ini merupakan sistem **Smart Home berbasis Internet of Things (IoT)** yang menggunakan **ESP32 WeMos D1 R32** sebagai mikrokontroler utama dan protokol **MQTT** sebagai media komunikasi data secara real-time.
+
+Sistem ini memungkinkan pengguna untuk mengontrol perangkat elektronik seperti **lampu** dan **kipas**, serta memonitor **suhu** dan **kelembaban** melalui antarmuka website. Selain kontrol manual, sistem juga memiliki mode otomatis dimana kipas akan menyala ketika suhu mencapai **30°C** atau lebih.
+
+Selain itu, proyek ini memanfaatkan **FreeRTOS** bawaan ESP32 sehingga setiap proses dapat berjalan secara paralel, membuat sistem lebih responsif dan stabil.
 
 ---
 
-# 👥 KELOMPOK 4 - MIKROKONTROLER
+# 👥 Kelompok 4 - Mikrokontroler
 
 | Nama | NIM |
 |------|------|
@@ -17,102 +20,180 @@ Tujuan utama dari proyek ini adalah membangun sistem otomasi rumah sederhana yan
 
 ---
 
-## ✨ Fitur Utama
-- 💡 Kontrol lampu secara real-time melalui web
-- 🌬️ Kontrol kipas melalui dashboard web
-- 📡 Komunikasi cepat menggunakan protokol MQTT
-- 📊 Monitoring status perangkat secara real-time
-- 🌐 Dapat diakses melalui jaringan lokal maupun internet
+# ✨ Fitur Utama
+
+- 💡 Kontrol Lampu ON/OFF melalui website
+- 🌬️ Kontrol Kipas ON/OFF secara manual
+- 🤖 Mode Kipas Otomatis berdasarkan suhu
+- 🌡️ Monitoring suhu dan kelembaban menggunakan DHT22
+- 📡 Komunikasi data menggunakan MQTT
+- 🌐 Monitoring perangkat secara real-time
+- 📶 Mendukung pergantian koneksi ke dua jaringan WiFi
+- ⚡ Menggunakan FreeRTOS agar sistem berjalan lebih responsif
 
 ---
 
-## 🛠️ Teknologi yang Digunakan
+# 🛠 Hardware
 
-### Hardware
-- ESP32
+- ESP32 WeMos D1 R32
+- Sensor DHT22
 - Lampu LED
-- Kipas DC
+- Kipas DC 5V
+- Transistor NPN
+- Resistor 220Ω
 - Breadboard
-- Kabel jumper
+- Kabel Jumper
 
-### Software
+---
+
+# 💻 Software
+
 - Arduino IDE
+- FreeRTOS (ESP32)
+- HTML
+- CSS
+- JavaScript
 - MQTT Protocol
-- HTML, CSS, JavaScript
-- Web Dashboard
+- HiveMQ / MQTT Broker
 
 ---
 
-## ⚙️ Cara Kerja Sistem
+# 📚 Library Arduino
 
-1. ESP32 terhubung ke jaringan WiFi.
-2. ESP32 terkoneksi ke MQTT Broker.
-3. Website mengirim perintah ON/OFF ke topic MQTT tertentu.
-4. ESP32 menerima data dari broker dan menjalankan aksi:
-   - Menyalakan atau mematikan lampu
-   - Mengontrol kipas
-5. Status perangkat dikirim kembali ke website secara real-time.
-
----
-
-## 📌 Arsitektur Sistem
-
-```text
-[ Web Dashboard ]
-        │
-        │ MQTT
-        ▼
-[ MQTT Broker ]
-        │
-        ▼
-[ ESP32 Controller ]
-     │         │
-     ▼         ▼
- [ Lampu ]   [ Kipas ]
+```cpp
+WiFi.h
+PubSubClient.h
+DHT.h
 ```
 
 ---
 
-## 🚀 Instalasi dan Penggunaan
+# ⚙ Cara Kerja Sistem
 
-### 1. Clone Repository
+1. ESP32 terhubung ke jaringan WiFi.
+2. ESP32 melakukan koneksi ke MQTT Broker.
+3. Website mengirimkan perintah ON/OFF ke topic MQTT.
+4. ESP32 menerima perintah tersebut.
+5. ESP32 mengontrol lampu dan kipas sesuai perintah.
+6. Sensor DHT22 membaca suhu dan kelembaban setiap 5 detik.
+7. Data sensor dikirim ke MQTT Broker.
+8. Website menerima data sensor secara real-time.
+9. Jika mode otomatis aktif dan suhu ≥ 30°C maka kipas akan menyala secara otomatis.
+
+---
+
+# 📡 MQTT Topic
+
+| Topic | Fungsi |
+|--------|--------|
+| `smarthome/led` | Kontrol Lampu |
+| `smarthome/fan` | Kontrol Kipas |
+| `smarthome/sensor` | Mengirim data suhu dan kelembaban |
+
+---
+
+# 🧠 Implementasi FreeRTOS
+
+Project ini menggunakan **FreeRTOS** bawaan ESP32 untuk membagi pekerjaan menjadi beberapa **Task**, sehingga sistem dapat menjalankan beberapa proses secara bersamaan.
+
+Task yang digunakan:
+
+| Task | Fungsi |
+|------|--------|
+| TaskWiFi | Menghubungkan dan menjaga koneksi WiFi |
+| TaskMQTT | Menghubungkan MQTT dan menerima perintah |
+| TaskSensor | Membaca data DHT22 dan mengirim data ke MQTT |
+| TaskFan | Mengontrol kipas otomatis berdasarkan suhu |
+
+Pembagian task tersebut membuat komunikasi jaringan dan pembacaan sensor dapat berjalan secara paralel sehingga sistem lebih cepat dan responsif.
+
+---
+
+# 🏗 Arsitektur Sistem
+
+```text
+                     Web Dashboard
+                           │
+                   MQTT Publish/Subscribe
+                           │
+                     MQTT Broker
+                           │
+                        ESP32
+             ┌─────────────┴─────────────┐
+             │                           │
+        Sensor DHT22               Kontrol Output
+             │                 ┌─────────┴─────────┐
+             ▼                 ▼                   ▼
+   Monitoring Suhu        Lampu LED          Kipas DC
+```
+
+---
+
+# 🚀 Instalasi
+
+## 1. Clone Repository
+
 ```bash
 git clone https://github.com/username/smart-home-elektronik.git
 ```
 
-### 2. Upload Program ke ESP32
-- Buka project menggunakan Arduino IDE
-- Install library MQTT yang diperlukan
-- Pilih board ESP32
-- Upload program ke ESP32
+---
 
-### 3. Jalankan MQTT Broker
-Gunakan broker seperti:
-- Mosquitto
-- HiveMQ
-- EMQX
+## 2. Install Library Arduino
 
-### 4. Jalankan Web Dashboard
-Buka file HTML atau jalankan menggunakan local server.
+Install library berikut melalui **Library Manager** Arduino IDE.
+
+- PubSubClient
+- DHT Sensor Library
+- Adafruit Unified Sensor
 
 ---
 
-## 📷 Link Wokwi
-https://wokwi.com/projects/466313882452088833
+## 3. Pilih Board
 
-```md
-![Dashboard](images/dashboard.png)
+```
+ESP32 WeMos D1 R32
+```
+
+atau
+
+```
+ESP32 Dev Module
 ```
 
 ---
 
-## 📂 Struktur Project
+## 4. Upload Program
+
+- Hubungkan ESP32 ke komputer.
+- Pilih Port COM.
+- Klik Upload pada Arduino IDE.
+
+---
+
+## 5. Jalankan MQTT Broker
+
+Broker yang dapat digunakan:
+
+- HiveMQ
+- Mosquitto
+- EMQX
+
+---
+
+## 6. Jalankan Website
+
+Buka file **index.html** atau jalankan menggunakan Local Server.
+
+---
+
+# 📂 Struktur Project
 
 ```text
 smart-home/
 │
 ├── backend/
-│   └── (source code backend)
+│   └── (Source Code Backend)
 │
 ├── esp32/
 │   └── smart_home.ino
@@ -122,10 +203,60 @@ smart-home/
 │   ├── style.css
 │   └── script.js
 │
+├── images/
+│   ├── dashboard.png
+│   ├── rangkaian.png
+│   └── esp32.png
+│
 └── README.md
 ```
 
+---
 
+# 📷 Dokumentasi
 
-## 📄 License
-Project ini dibuat untuk kebutuhan Mata kuliah Mikrokontroler.
+### Dashboard
+
+```md
+![Dashboard](images/dashboard.png)
+```
+
+### Rangkaian
+
+```md
+![Rangkaian](images/rangkaian.png)
+```
+
+### ESP32
+
+```md
+![ESP32](images/esp32.png)
+```
+
+---
+
+# 🔗 Link Wokwi
+
+https://wokwi.com/projects/466313882452088833
+
+---
+
+# 📄 License
+
+Project ini dibuat untuk memenuhi tugas mata kuliah **Mikrokontroler**.
+
+---
+
+# ⭐ Teknologi yang Digunakan
+
+- ESP32 WeMos D1 R32
+- FreeRTOS
+- MQTT
+- IoT
+- HTML
+- CSS
+- JavaScript
+- Arduino IDE
+- DHT22
+- WiFi
+- HiveMQ
