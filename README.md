@@ -213,28 +213,6 @@ smart-home/
 
 ---
 
-# 📷 Dokumentasi
-
-### Dashboard
-
-```md
-![Dashboard](images/dashboard.png)
-```
-
-### Rangkaian
-
-```md
-![Rangkaian](images/rangkaian.png)
-```
-
-### ESP32
-
-```md
-![ESP32](images/esp32.png)
-```
-
----
-
 # 🔗 Link Wokwi
 
 https://wokwi.com/projects/466313882452088833
