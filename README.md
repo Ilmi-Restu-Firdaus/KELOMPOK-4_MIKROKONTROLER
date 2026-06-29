@@ -239,3 +239,4 @@ Project ini dibuat untuk memenuhi tugas mata kuliah **Mikrokontroler**.
 - DHT22
 - WiFi
 - HiveMQ
+- Shiftr.io
