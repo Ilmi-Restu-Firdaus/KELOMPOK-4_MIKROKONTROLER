@@ -55,6 +55,7 @@ Selain itu, proyek ini memanfaatkan **FreeRTOS** bawaan ESP32 sehingga setiap pr
 - JavaScript
 - MQTT Protocol
 - HiveMQ / MQTT Broker
+- Shiftr.io
 
 ---
 
